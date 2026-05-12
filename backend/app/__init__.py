@@ -1,0 +1,19 @@
+from os import getenv
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+MONGO_DSN = getenv("MONGO_DSN")
+MONGO_DSN_TEST = getenv("MONGO_DSN_TEST")
+
+AI_API_KEY = getenv("AI_API_KEY")
+
+ENVIRONMENT = getenv("ENVIRONMENT")
+
+ALGORITHM = getenv("ALGORITHM")
+SECRET_KEY = getenv("SECURITY_KEY")
+SECRET_KEY_USER = getenv("SECRET_KEY_USER")
+ACCESS_TOKEN_EXPIRE_MINUTES = getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+ADMIN_PANEL_PASSWORD = getenv("ADMIN_PANEL_PASSWORD")
+

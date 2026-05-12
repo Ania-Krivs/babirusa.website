@@ -1,0 +1,87 @@
+version: "3.8"
+
+services:
+  frontend:
+    env_file:
+      - ./frontend/.env
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    restart: always
+    ports:
+      - "0.0.0.0:1000:80"
+    network_mode: bridge
+    
+  mitm:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.mitmproxy
+    container_name: mitm_proxy
+    ports:
+      - "0.0.0.0:8080:8080"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend:/app
+    network_mode: bridge
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+
+  babirusa-codeserver:
+    image: skfx/babirusa-codeserver
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.codeserver
+    restart: "no"
+    entrypoint: ["echo", "Build-only mode: Container not started"]
+    command: ["exit", "0"]
+    network_mode: bridge
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "0.0.0.0:5000:5000"
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+      - mitm
+      - frontend
+      - babirusa-codeserver
+    volumes:
+      - ./backend:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /babirusa.website/backend/babirusa:/babirusa
+    network_mode: bridge
+
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "0.0.0.0:27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    network_mode: bridge
+
+volumes:
+  mongo_data:
