@@ -18,7 +18,7 @@ export function Group(props: IGroupProps) {
   const [cookies] = useCookies(['SKFX-TEACHER-AUTH']);
 
   const deleteGroup = (groupId: string) => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/teacher/groups?groups_id=${groupId}`, {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/teacher/groups/${groupId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${cookies['SKFX-TEACHER-AUTH']}`,
@@ -30,7 +30,7 @@ export function Group(props: IGroupProps) {
           ...notifications,
           {
             id: v4(),
-            text: 'Ученик успешно удален',
+            text: 'Группа успешно удалена',
             time: 5000,
           },
         ]);
@@ -39,7 +39,7 @@ export function Group(props: IGroupProps) {
           ...notifications,
           {
             id: v4(),
-            text: 'Ошибка удаления ученика',
+            text: 'Ошибка удаления группы',
             time: 5000,
           },
         ]);
@@ -53,7 +53,7 @@ export function Group(props: IGroupProps) {
         ...notifications,
         {
           id: v4(),
-          text: 'Ошибка удаления ученика',
+          text: 'Ошибка удаления группы',
           time: 5000,
         },
       ]);
