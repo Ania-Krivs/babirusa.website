@@ -90,7 +90,7 @@ async def check_task_ai(request: schemas.CheckTaskRequest, _: Teacher = Depends(
     if not pupil:
         raise Error.PUPIL_NOT_FOUND_EXCEPTION
     
-    file_path = f"/app/backend/babirusa/user-{request.pupil_username}-prj/main.py"
+    file_path = f"/app/babirusa/user-{request.pupil_username}-prj/main.py"
     with open(file_path, 'r') as f:
         code = f.read()
     
