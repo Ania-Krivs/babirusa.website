@@ -64,7 +64,7 @@ def groq_chat(prompt, code):
 
     response = requests.post(url, headers=headers, json=payload, verify=False)
     
-    content = json.loads(response.json()["choices"][0]["message"]["content"])
+    content = response.json()["choices"][0]["message"]["content"]
     content = re.sub(r"```json|```", "", content).strip()
     return json.loads(content)
     

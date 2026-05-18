@@ -278,7 +278,7 @@ export function Unit({ unit, groupId, groups }: IUnitProps) {
         ) : (
           <>
             <div className={styles.action} onClick={() => deleteUnit(unit.id)}>
-              fetch_links=True
+              Удалить из группы
             </div>
             {groups ? (
               <select
